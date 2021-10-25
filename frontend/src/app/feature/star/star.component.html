@@ -1,0 +1,43 @@
+<div class="d-flex">
+  <mat-card class="col-3 ml-auto">
+    <mat-card-header>
+      <mat-card-title>Moyenne globale</mat-card-title>
+      <mat-card-subtitle>{{voteService.votes.length}} votes</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div>
+        <span style="font-size: 3em; margin-right: 40px">&#11088;</span>
+        <span class="h1 mt-auto mb-auto">{{globalAverage}}/5</span>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+
+
+  <mat-card class="col-3 mr-auto">
+    <mat-card-header>
+      <mat-card-title>
+          <span>Moyenne par tenant</span>
+            <select class="form-control-sm float-right" [(ngModel)]="this.tenant" (change)="calculateTenantAverage()">
+              <option *ngFor="let tenant of this.tenants" [value]="tenant">
+                {{tenant}}
+              </option>
+            </select>
+      </mat-card-title>
+      <mat-card-subtitle>{{tenantVotesNumber}} votes</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="tenantAverage">
+        <span style="font-size: 3em; margin-right: 40px">&#11088;</span>
+        <span class="h1 mt-auto mb-auto">{{tenantAverage}}/5</span>
+      </div>
+      <div class="text-center h3" *ngIf="!tenantAverage">
+        Pas de vote pour ce tenant
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+</div>
+

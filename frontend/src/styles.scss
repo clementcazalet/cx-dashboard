@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+* {
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+// Must be on global style sheet, not working on component level
+.mat-card-header-text {
+  width: 100%;
+}
