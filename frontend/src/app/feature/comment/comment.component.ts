@@ -1,45 +1,41 @@
 import { Component, OnInit } from '@angular/core';
-import {animate, state, style, transition, trigger} from "@angular/animations";
 import {Vote} from "../../model/vote.model";
 import {VoteService} from "../../service/vote.service";
 import {DatePipe} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
 import {UserComponent} from "../user/user.component";
+import {CommentFilter} from "./filter/comment.filter.model";
 
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ]
+  styleUrls: ['./comment.component.scss']
 })
 export class CommentComponent implements OnInit {
 
-  public COMMENT = 'Commentaire';
-  public VOTE = 'Vote';
-  public DATE = 'Date';
-  public USER = 'Utilisateur';
-  public TENANT = 'Tenant';
+  readonly COMMENT = 'Commentaire';
+  readonly VOTE = 'Vote';
+  readonly DATE = 'Date';
+  readonly USER = 'Utilisateur';
+  readonly TENANT = 'Tenant';
 
-  dataSource: Vote[];
-  columnsToDisplay: string[] = [this.COMMENT, this.VOTE, this.DATE, this.USER, this.TENANT];
+  readonly columnsToDisplay: string[] = [this.COMMENT, this.VOTE, this.DATE, this.USER, this.TENANT];
 
-  expandedElement?: Vote | null;
+  static readonly YES = 'Oui';
+  static readonly NO = 'Non';
+  static readonly ALL = 'Tous';
+  readonly YES_OR_NOT = [CommentComponent.ALL, CommentComponent.YES, CommentComponent.NO];
 
-  constructor(private voteService: VoteService, private datePipe: DatePipe, private matDialog: MatDialog) {
-    this.dataSource = this.voteService.votes;
+  activeFilters: CommentFilter;
+
+  constructor(public voteService: VoteService, private datePipe: DatePipe, private matDialog: MatDialog) {
+    this.activeFilters = {
+      commentPresent: CommentComponent.ALL
+    };
   }
 
   ngOnInit(): void {
-    this.voteService.onLoad.subscribe(
-      () => this.dataSource = this.voteService.votes,
-      error => console.error(error)
-    );
+
   }
 
   getValue = (vote: Vote, key: string): any => {

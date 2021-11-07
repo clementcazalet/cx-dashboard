@@ -1,41 +1,50 @@
-<table mat-table
-       [dataSource]="dataSource" multiTemplateDataRows
-       class="mat-elevation-z8 w-75 ml-auto mr-auto mt-5">
-  <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
-    <th mat-header-cell *matHeaderCellDef> {{column}} </th>
-    <td mat-cell *matCellDef="let element" style="white-space:pre-wrap; word-wrap:break-word">
-      <div style="margin-top: 10px; margin-bottom: 10px; font-size: 15px">
-        {{getValue(element, column)}}
-        <span *ngIf="column === USER" (click)="openUserInfo(element.user.id)" class="font-weight-bold" style="cursor: pointer">&#9432;</span>
-      </div>
-    </td>
-  </ng-container>
+<table mat-table [dataSource]="voteService.votes | commentFilter: activeFilters" class="mat-elevation-z8 w-75 ml-auto mr-auto mt-5">
 
-  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-  <ng-container matColumnDef="expandedDetail">
-    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-      <div class="example-element-detail"
-           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-<!--        <div class="example-element-diagram">-->
-<!--          <div class="example-element-position"> {{element.position}} </div>-->
-<!--          <div class="example-element-symbol"> {{element.symbol}} </div>-->
-<!--          <div class="example-element-name"> {{element.name}} </div>-->
-<!--          <div class="example-element-weight"> {{element.weight}} </div>-->
-<!--        </div>-->
-<!--        <div class="example-element-description">-->
-<!--          {{element.description}}-->
-<!--          <span class="example-element-description-attribution"> &#45;&#45; Wikipedia </span>-->
-<!--        </div>-->
-        aaaaa
+  <ng-container *ngFor="let column of columnsToDisplay" matColumnDef="{{column}}">
+    <th mat-header-cell *matHeaderCellDef class="text-center">
+      <!-- Display column name -->
+      <span style="font-size: 17px" class="font-weight-bold">{{column}}</span>
+
+      <!-- Comment filters -->
+      <div *ngIf="column === COMMENT">
+        <select class="form-control-sm" [(ngModel)]="activeFilters.commentPresent">
+          <option *ngFor="let option of YES_OR_NOT">
+            {{option}}
+          </option>
+        </select>
+        <input type="text" class="form-control-sm" [(ngModel)]="activeFilters.comment">
       </div>
+
+      <!-- Vote filters -->
+      <div *ngIf="column === VOTE">
+        de <input type="number" class="form-control-sm" style="width: 60px" [(ngModel)]="activeFilters.starStart">
+        à <input type="number" class="form-control-sm" style="width: 60px" [(ngModel)]="activeFilters.starEnd">
+      </div>
+
+      <!-- Date filters -->
+      <div *ngIf="column === DATE">
+        du <input type="date" class="form-control-sm" [(ngModel)]="activeFilters.dateStart">
+        au <input type="date" class="form-control-sm" [(ngModel)]="activeFilters.dateEnd">
+      </div>
+
+      <!-- User filters -->
+      <div *ngIf="column === USER">
+        <input type="text" class="form-control-sm" [(ngModel)]="activeFilters.user">
+      </div>
+
+      <!-- Tenant filters -->
+      <div *ngIf="column === TENANT">
+        <input type="text" class="form-control-sm" [(ngModel)]="activeFilters.tenant">
+      </div>
+
+    </th>
+
+    <td mat-cell *matCellDef="let element" class="text-center">
+      {{getValue(element, column)}}
+      <span *ngIf="column === USER" (click)="openUserInfo(element.user.id)" class="font-weight-bold" style="cursor: pointer">&nbsp;&#9432;</span>
     </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-  <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
-      class="example-element-row"
-      [class.example-expanded-row]="expandedElement === element"
-      (click)="expandedElement = expandedElement === element ? null : element">
-  </tr>
-  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+  <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
 </table>

@@ -15,12 +15,14 @@ import {NgxChartsModule} from "@swimlane/ngx-charts";
 import { UserComponent } from './feature/user/user.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {HttpClientModule} from "@angular/common/http";
+import {CommentFilterPipe} from "./feature/comment/filter/comment.filter.pipe";
 
 @NgModule({
   declarations: [
     AppComponent,
     StarComponent,
     CommentComponent,
+    CommentFilterPipe,
     ChartComponent,
     UserComponent
   ],
