@@ -25,6 +25,11 @@ export class CommentFilterPipe implements PipeTransform {
       .filter(vote => !activeFilter.dateStart || vote.date && vote.date >= new Date(activeFilter.dateStart))
       .filter(vote => !activeFilter.dateEnd || vote.date && vote.date <= new Date(activeFilter.dateEnd))
       .filter(vote => !activeFilter.user || vote.user?.login && vote.user.login.toLowerCase().includes(activeFilter.user.toLowerCase()))
-      .filter(vote => !activeFilter.tenant || vote.tenant?.name && vote.tenant.name.toLowerCase().includes(activeFilter.tenant.toLowerCase()));
+      .filter(vote => !activeFilter.tenant || vote.tenant?.name && vote.tenant.name.toLowerCase().includes(activeFilter.tenant.toLowerCase()))
+      .sort((vote1, vote2) => {
+        if(vote1.date && vote2.date && vote1.date > vote2.date) return -1;
+        if(vote1.date && vote2.date && vote1.date < vote2.date) return 1;
+        return 0;
+      });
   }
 }
