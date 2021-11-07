@@ -3,14 +3,19 @@ import {Vote} from "../../model/vote.model";
 import {Tenant} from "../../model/tenant.model";
 import {User} from "../../model/user.model";
 import {Injectable} from "@angular/core";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
-export class VoteHttpService extends GenericHttpService {
+export class VoteHttpService extends GenericHttpService<Vote> {
 
-  getAll = (): Vote[] => {
-    return this.mockVotes();
+  //getAll = (): Vote[] => {
+  //  return this.mockVotes();
+  //}
+
+  constructor(private httpClient: HttpClient) {
+    super('/vote', httpClient);
   }
 
   private mockVotes = (): Vote[] => {

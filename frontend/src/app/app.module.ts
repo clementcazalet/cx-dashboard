@@ -12,13 +12,17 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DatePipe} from "@angular/common";
 import { ChartComponent } from './feature/chart/chart.component';
 import {NgxChartsModule} from "@swimlane/ngx-charts";
+import { UserComponent } from './feature/user/user.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
     AppComponent,
     StarComponent,
     CommentComponent,
-    ChartComponent
+    ChartComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +31,9 @@ import {NgxChartsModule} from "@swimlane/ngx-charts";
     MatCardModule,
     FormsModule,
     MatTableModule,
-    NgxChartsModule
+    NgxChartsModule,
+    MatDialogModule,
+    HttpClientModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

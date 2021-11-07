@@ -20,8 +20,18 @@ export class StarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.calculateGlobalAverage();
-    this.calculateTenantAverage();
+    this.voteService.onLoad.subscribe(
+      () => {
+        this.calculateGlobalAverage();
+        this.calculateTenantAverage();
+      },
+      error => console.error(error)
+    );
+
+    if(this.voteService.votes.length > 0) {
+      this.calculateGlobalAverage();
+      this.calculateTenantAverage();
+    }
   }
 
   calculateGlobalAverage = () => {

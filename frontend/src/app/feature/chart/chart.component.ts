@@ -14,6 +14,22 @@ export class ChartComponent implements OnInit {
 
   constructor(private voteService: VoteService, private datePipe: DatePipe) {
     this.values = [];
+    this.results = [];
+  }
+
+  ngOnInit(): void {
+    this.voteService.onLoad.subscribe(
+      () => this.createChart(),
+      error => console.log(error)
+    );
+
+    if(this.voteService.votes.length > 0) {
+      this.createChart();
+    }
+  }
+
+  private createChart = () => {
+    this.values = [];
     let count = 0;
     this.voteService.votes.sort((vote1, vote2) => {
       if(vote1.date && vote2.date && vote1.date < vote2.date) return -1;
@@ -50,16 +66,10 @@ export class ChartComponent implements OnInit {
       }
     });
 
-    console.log(this.values);
-
     this.results = [{
       name: "Moyenne",
       series: this.values
     }];
-
-  }
-
-  ngOnInit(): void {
   }
 
 }

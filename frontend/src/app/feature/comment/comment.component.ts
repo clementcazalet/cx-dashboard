@@ -3,6 +3,8 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 import {Vote} from "../../model/vote.model";
 import {VoteService} from "../../service/vote.service";
 import {DatePipe} from "@angular/common";
+import {MatDialog} from "@angular/material/dialog";
+import {UserComponent} from "../user/user.component";
 
 @Component({
   selector: 'app-comment',
@@ -18,22 +20,26 @@ import {DatePipe} from "@angular/common";
 })
 export class CommentComponent implements OnInit {
 
-  private COMMENT = 'Commentaire';
-  private VOTE = 'Vote';
-  private DATE = 'Date';
-  private USER = 'Utilisateur';
-  private TENANT = 'Tenant';
+  public COMMENT = 'Commentaire';
+  public VOTE = 'Vote';
+  public DATE = 'Date';
+  public USER = 'Utilisateur';
+  public TENANT = 'Tenant';
 
   dataSource: Vote[];
   columnsToDisplay: string[] = [this.COMMENT, this.VOTE, this.DATE, this.USER, this.TENANT];
 
   expandedElement?: Vote | null;
 
-  constructor(private voteService: VoteService, private datePipe: DatePipe) {
+  constructor(private voteService: VoteService, private datePipe: DatePipe, private matDialog: MatDialog) {
     this.dataSource = this.voteService.votes;
   }
 
   ngOnInit(): void {
+    this.voteService.onLoad.subscribe(
+      () => this.dataSource = this.voteService.votes,
+      error => console.error(error)
+    );
   }
 
   getValue = (vote: Vote, key: string): any => {
@@ -41,9 +47,14 @@ export class CommentComponent implements OnInit {
       case this.COMMENT: return vote.comment;
       case this.VOTE: return vote.star + '/5';
       case this.DATE: return this.datePipe.transform(vote.date, 'dd/MM/yyyy');
-      case this.USER: return vote.user.firstName + ' ' + vote.user.lastName;
+      case this.USER: return vote.user.login;
       case this.TENANT: return vote.tenant.name;
       default: throw new Error('Column key [' + key + '] not implemented');
     }
+  }
+
+  openUserInfo = (id: string) => {
+    let config = {data: id};
+    this.matDialog.open(UserComponent, config);
   }
 }
