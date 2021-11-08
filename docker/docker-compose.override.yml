@@ -1,0 +1,15 @@
+version: '3.0'
+services:
+  cx-database:
+    container_name: cx-database
+    image: ${docker.registry}/database:${project.version}
+    hostname: cx-database
+    env_file:
+      - database.env
+    networks:
+      - cx-network
+    ports:
+      - 5432:5432
+  cx-backend:
+    depends_on:
+      - cx-database

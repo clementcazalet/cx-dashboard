@@ -1,0 +1,24 @@
+version: '3.0'
+services:
+  cx-backend:
+    env_file:
+      - backend.env
+    container_name: cx-backend
+    image: ${docker.registry}/backend:${project.version}
+    hostname: cx-backend
+    networks:
+      - cx-network
+  cx-frontend:
+    container_name: cx-frontend
+    image: ${docker.registry}/frontend:${project.version}
+    hostname: cx-frontend
+    networks:
+      - cx-network
+    depends_on:
+      - cx-backend
+    ports:
+      - 80:80
+networks:
+  cx-network:
+    external:
+      name: slfi

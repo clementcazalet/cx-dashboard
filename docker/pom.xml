@@ -13,4 +13,70 @@
 
     <packaging>pom</packaging>
 
+    <properties>
+        <docker.registry>cx-dashboard</docker.registry>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly.docker.xml</descriptor>
+                        <descriptor>assembly.compose.xml</descriptor>
+                    </descriptors>
+                    <finalName>cx</finalName>
+                    <appendAssemblyId>true</appendAssemblyId>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.37.0</version>
+                <executions>
+                    <execution>
+                        <id>build</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>${docker.registry}/backend:${project.version}</name>
+                            <build>
+                                <dockerFile>${project.build.directory}/cx-docker/backend/Dockerfile</dockerFile>
+                            </build>
+                        </image>
+                        <image>
+                            <name>${docker.registry}/frontend:${project.version}</name>
+                            <build>
+                                <dockerFile>${project.build.directory}/cx-docker/frontend/Dockerfile</dockerFile>
+                            </build>
+                        </image>
+                        <image>
+                            <name>${docker.registry}/database:${project.version}</name>
+                            <build>
+                                <dockerFile>${project.build.directory}/cx-docker/database/Dockerfile</dockerFile>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

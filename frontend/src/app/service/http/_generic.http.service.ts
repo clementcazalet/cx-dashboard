@@ -5,8 +5,7 @@ export abstract class GenericHttpService<T> {
   protected path: string;
 
   private static DATA_REST_PATH = '/data';
-  // FIXME get from env
-  private static BACKEND_URL = 'http://localhost:8080';
+  private static BACKEND_URL = '/back';
 
   protected constructor(endpoint: string, private client: HttpClient) {
     this.path = GenericHttpService.BACKEND_URL + GenericHttpService.DATA_REST_PATH + endpoint;
